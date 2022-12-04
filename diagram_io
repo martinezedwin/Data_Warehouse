@@ -1,0 +1,49 @@
+Table user as U {
+  user_id int [pk]
+  first_name TEXT
+  last_name TEXT
+  gender char(int1)
+  level TEXT
+}
+
+Table songs as S {
+  song_id TEXT [pk]
+  title TEXT
+  artist_id TEXT
+  year int 
+  duration float
+}
+
+Table artists as A {
+  artist_id TEXT [pk]
+  name TEXT
+  location TEXT
+  latitude float
+  longitude float 
+}
+
+Table time as T {
+  start_time timestamp [pk]
+  hour int 
+  day int 
+  week int 
+  month int 
+  year int 
+  weekday TEXT
+}
+
+Table songplays as SP {
+  songplay_id int [pk, increment]
+  start_time timestamp
+  user_id int 
+  song_id TEXT
+  artist_id TEXT
+  level TEXT
+  session_id int 
+  user_agent text
+}
+
+Ref: U.user_id > SP.user_id
+Ref: A.artist_id > SP.artist_id
+Ref: S.song_id > SP.song_id
+Ref: T.start_time > SP.start_time
