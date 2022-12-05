@@ -31,6 +31,9 @@ region_name = "us-west-2"
 
 
 def create_iam_role(iam):
+    """
+    Creates IAM role
+    """
     try:
         print("1.1 Creating a new IAM Role") 
         dwhRole = iam.create_role(
@@ -59,6 +62,9 @@ def create_iam_role(iam):
     return roleArn
 
 def create_cluster(roleArn, redshift):
+    """
+    Creates cluster
+    """
     try:
         response = redshift.create_cluster(        
             #HW
@@ -80,17 +86,10 @@ def create_cluster(roleArn, redshift):
         print(e)
 
 
-def prettyRedshiftProps(props):
-    pd.set_option('display.max_colwidth', -1)
-    keysToShow = ["ClusterIdentifier", "NodeType", "ClusterStatus", "MasterUsername", "DBName", "Endpoint", "NumberOfNodes", 'VpcId']
-    x = [(k, v) for k,v in props.items() if k in keysToShow]
-    return pd.DataFrame(data=x, columns=["Key", "Value"])
-
-# myClusterProps = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
-# prettyRedshiftProps(myClusterProps)
-
-
 def clean_up(iam, redshift):
+    """
+    Deletes cluster and IAM role
+    """
     myClusterProps = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
     DWH_ENDPOINT = myClusterProps['Endpoint']['Address']
     DWH_ROLE_ARN = myClusterProps['IamRoles'][0]['IamRoleArn']
