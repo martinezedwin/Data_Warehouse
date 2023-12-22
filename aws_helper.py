@@ -4,7 +4,7 @@ import json
 import configparser
 import argparse
 from time import sleep
-import os 
+import os
 
 config = configparser.ConfigParser()
 config.optionxform = str
@@ -35,7 +35,7 @@ def create_iam_role(iam):
     Creates IAM role
     """
     try:
-        print("1.1 Creating a new IAM Role") 
+        print("1.1 Creating a new IAM Role")
         dwhRole = iam.create_role(
             Path='/',
             RoleName=DWH_IAM_ROLE_NAME,
@@ -45,7 +45,7 @@ def create_iam_role(iam):
                     'Effect': 'Allow',
                     'Principal': {'Service': 'redshift.amazonaws.com'}}],
                     'Version': '2012-10-17'})
-        )  
+        )
     except Exception as e:
         print(e)
 
@@ -66,7 +66,7 @@ def create_cluster(roleArn, redshift):
     Creates cluster
     """
     try:
-        response = redshift.create_cluster(        
+        response = redshift.create_cluster(
             #HW
             ClusterType=DWH_CLUSTER_TYPE,
             NodeType=DWH_NODE_TYPE,
@@ -77,7 +77,7 @@ def create_cluster(roleArn, redshift):
             ClusterIdentifier=DWH_CLUSTER_IDENTIFIER,
             MasterUsername=DWH_DB_USER,
             MasterUserPassword=DWH_DB_PASSWORD,
-            
+
             #Roles (for s3 access)
             IamRoles=[roleArn]
         )
@@ -130,7 +130,7 @@ def main(args):
             cluster = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
             # print(cluster['ClusterStatus'])
             if cluster['ClusterStatus'] == 'available':
-                with open('dwh.cfg', 'w') as configfile:                
+                with open('dwh.cfg', 'w') as configfile:
                     DWH_ENDPOINT = cluster['Endpoint']['Address']
                     DWH_ROLE_ARN = cluster['IamRoles'][0]['IamRoleArn']
                     config.set('CLUSTER', 'HOST', DWH_ENDPOINT)
