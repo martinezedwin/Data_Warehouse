@@ -50,5 +50,5 @@ python etl.py
 
 ## Result
 Tables seen through [DBeaver](https://dbeaver.io/)
-![plot](./pictures/Data_Warehouse_DBeaver.png.png)
+![hello](./pictures/Data_Warehouse_DBeaver.png.png)
 
